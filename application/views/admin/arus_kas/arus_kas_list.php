@@ -97,23 +97,23 @@
 						</div>
 						<div class="col-md-4 text-right">
 						</div>
-					</div>  
+					</div>
 					<!--<div class="row" style="margin-bottom: 10px">-->
-					    
-    	<!--				<form>-->
-    	<!--				    <div class="form-group">-->
-    	<!--				        <div class="col-sm-3">-->
-    	<!--				            <div class="row">-->
-     <!--   					            <label>Tanggal</label>-->
-     <!--   					            <input type="text" class="input-sm form-control" id="datepicker1"  value="<?=date('d-m-Y')?>" on>-->
-    					                
-    	<!--				            </div>-->
-    	<!--				        </div>-->
-    	<!--				    </div>-->
-    	<!--				</form>-->
+
+					<!--				<form>-->
+					<!--				    <div class="form-group">-->
+					<!--				        <div class="col-sm-3">-->
+					<!--				            <div class="row">-->
+					<!--   					            <label>Tanggal</label>-->
+					<!--   					            <input type="text" class="input-sm form-control" id="datepicker1"  value="<?= date('d-m-Y') ?>" on>-->
+
+					<!--				            </div>-->
+					<!--				        </div>-->
+					<!--				    </div>-->
+					<!--				</form>-->
 					<!--</div>-->
 
-					 <form method="post" id="formPeriode" class="form-horizontal" action="">
+					<form method="post" id="formPeriode" class="form-horizontal" action="">
 						<div class="form-group">
 							<div class="col-sm-6">
 								<div class="row">
@@ -131,9 +131,9 @@
 							</div>
 							<div class="col-sm-3">
 							</div>
-							
+
 						</div>
-					</form> 
+					</form>
 					<div class="table-responsive">
 						<table class="table table-bordered table-striped" id="mytable">
 							<thead>
@@ -146,148 +146,173 @@
 									<th>Pengeluaran</th>
 								</tr>
 
-								
+
 							</thead>
 							<tbody>
-							<?php 
-							$no=1;
-							$jml_laba_masuk=0;
-							$jml_beban_keluar=0;
-							$jml_masuk=0;
-							$jml_keluar=0;
-							        foreach($penjualan as $p){?>
-							            <tr>
-							                <td>
-							                    <?=$no++?>
-							                </td>
-							                <td>
-							                    <?=$p->tgl_order?>
-							                </td>
-							                <td>
-                                                -
-							                </td>
-							                <td>
-                                               Laba Penjualan
-							                </td>
-							                <td>
-                                                 <?=number_format($p->total)?>
-							                </td>
-							                <td>
-							                    -
-							                </td>
-							            </tr>
-							              <?php $jml_laba_masuk=$p->total ;?>
-							        <?php 
-							            
-							        } 
-							        
-							        foreach($beban as $b){?>
-							            <tr>
-							                 <td>
-							                    <?=$no++?>
-							                </td>
-							                <td>
-							                    -
-							                </td>
-							                <td>
-							                   -
-							                </td>
-							                <td>
-							                   Beban Karyawan
-							                   <?php 
-							                   $nama_karyawan= $this->db->select('u.*')
-							                 ->from('users u')
-							                 ->where('u.id_users',$b->id_users)
-							                 ->where('u.id_toko',$this->userdata->id_toko)
-							                        ->get()
-							                        ->row();
-							                        if($nama_karyawan!=null){
-							                            echo $nama_karyawan->first_name;
-							                        }else{
-							                            echo $b->nama;
-							                        }
-							                   
-							                   ?>
-							                </td>
-							                <td>
-							                   -
-							                </td>
-							                <td>
-							                    <?=number_format($b->nominal/$b->beban_per)?>
-							                </td>
-							            </tr>
-							        
-							        <?php
-							            $jml_beban_keluar+=($b->nominal/$b->beban_per);
-							        }
-							        
-							        
-							        
-							        ?>
-							            
-							                  
-							                
-							        <?php
-							
-									foreach($kas as $k){?>
-										<tr>
-											<td>
-												<?=$no++?>
-											</td>
-											<td>
-												<?=$k->tgl?>
-											</td>
-											<td>
-												<?=$k->akun?>
-											</td>
-											<td>
-												<?=$k->ket?>
-											</td>
-											<?php if ($k->id_kas==1){
-												$jml_masuk=$jml_masuk+=$k->nominal;
+								<?php
+								$no = 1;
+								$jml_laba_masuk = 0;
+								$jml_beban_keluar = 0;
+								$jml_masuk = 0;
+								$jml_keluar = 0;
+								foreach ($penjualan as $p) { ?>
+									<tr>
+										<td>
+											<?= $no++ ?>
+										</td>
+										<td>
+											<?= $p->tgl_order ?>
+										</td>
+										<td>
+											-
+										</td>
+										<td>
+											Laba Penjualan
+										</td>
+										<td>
+											<?= number_format($p->total) ?>
+										</td>
+										<td>
+											-
+										</td>
+									</tr>
+								<?php $jml_laba_masuk = $p->total;
+								} ?>
+
+
+								<?php
+								foreach ($pembelian as $pb) {
+									?>
+									<td>
+										<?= $no++ ?>
+									</td>
+									<td>
+									</td>
+									<td>
+										-
+									</td>
+									<td>
+										Pembelian
+									</td>
+									<td>
+										-
+									</td>
+									<td>
+										<?= number_format($pb->total) ?>
+									</td>
+									</tr>
+
+								<?php
+									$jml_beban_keluar += $pb->total;
+								}
+
+								foreach ($beban as $b) { ?>
+									<tr>
+										<td>
+											<?= $no++ ?>
+										</td>
+										<td>
+											-
+										</td>
+										<td>
+											-
+										</td>
+										<td>
+											Beban Karyawan
+											<?php
+												$nama_karyawan = $this->db->select('u.*')
+													->from('users u')
+													->where('u.id_users', $b->id_users)
+													->where('u.id_toko', $this->userdata->id_toko)
+													->get()
+													->row();
+												if ($nama_karyawan != null) {
+													echo $nama_karyawan->first_name;
+												} else {
+													echo $b->nama;
+												}
+
 												?>
-												<td>
-												<?=number_format($k->nominal)?>
-												</td>
-												<?php }else{?>
-														<td>
-															-
-														</td>
-													<?php
-													
-												} ?>
-											
-											<?php if ($k->id_kas==2){ 
-												$jml_keluar=$jml_keluar+=$k->nominal;
+										</td>
+										<td>
+											-
+										</td>
+										<td>
+											<?= number_format($b->nominal / $b->beban_per) ?>
+										</td>
+									</tr>
+
+								<?php
+									$jml_beban_keluar += ($b->nominal / $b->beban_per);
+								}
+
+
+
+								?>
+
+
+
+								<?php
+
+								foreach ($kas as $k) { ?>
+									<tr>
+										<td>
+											<?= $no++ ?>
+										</td>
+										<td>
+											<?= $k->tgl ?>
+										</td>
+										<td>
+											<?= $k->akun ?>
+										</td>
+										<td>
+											<?= $k->ket ?>
+										</td>
+										<?php if ($k->id_kas == 1) {
+												$jml_masuk = $jml_masuk += $k->nominal;
 												?>
-												<td>
-												<?=number_format($k->nominal)?>
-												</td>
-												<?php }else{?>
-														<td>
-															-
-														</td>
-													<?php
-													
-												} ?>
-										</tr>
-										<?php 
-									
-										
-										
-										
-									}
+											<td>
+												<?= number_format($k->nominal) ?>
+											</td>
+										<?php } else { ?>
+											<td>
+												-
+											</td>
+										<?php
+
+											} ?>
+
+										<?php if ($k->id_kas == 2) {
+												$jml_keluar = $jml_keluar += $k->nominal;
+												?>
+											<td>
+												<?= number_format($k->nominal) ?>
+											</td>
+										<?php } else { ?>
+											<td>
+												-
+											</td>
+										<?php
+
+											} ?>
+									</tr>
+								<?php
+
+
+
+
+								}
 								?>
 							</tbody>
 							<tfoot>
 								<tr>
 									<th class="text-right" colspan="4">JUMLAH</th>
-									<th class="text-right"><span id="jumlah_pemasukkan"></span> <?= number_format($jml_masuk+ $jml_laba_masuk)?></th>
-									<th class="text-right"><span id="jumlah_pengeluaran"></span>  <?= number_format($jml_keluar+ $jml_beban_keluar)?></th>
+									<th class="text-right"><span id="jumlah_pemasukkan"></span> <?= number_format($jml_masuk + $jml_laba_masuk) ?></th>
+									<th class="text-right"><span id="jumlah_pengeluaran"></span> <?= number_format($jml_keluar + $jml_beban_keluar) ?></th>
 								</tr>
 								<tr>
 									<th class="text-right" colspan="4">TOTAL</th>
-									<th class="text-right" colspan="2"><span id="total"><?= number_format(($jml_masuk+ $jml_laba_masuk)-($jml_keluar+ $jml_beban_keluar))?></span></th>
+									<th class="text-right" colspan="2"><span id="total"><?= number_format(($jml_masuk + $jml_laba_masuk) - ($jml_keluar + $jml_beban_keluar)) ?></span></th>
 								</tr>
 							</tfoot>
 						</table>
